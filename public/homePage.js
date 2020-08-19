@@ -28,10 +28,10 @@ let myMoneyManager = new MoneyManager();
 myMoneyManager.addMoneyCallback = ({ currency, amount }) => {
     ApiConnector.addMoney({ currency, amount }, ({success, data, error}) => {
         if (success) {
-            myMoneyManager.setMessage(false, "Пополнение счета прошло успешно");
+            myMoneyManager.setMessage(true, "Пополнение счета прошло успешно");
             ProfileWidget.showProfile(data);
         } else {
-            myMoneyManager.setMessage(true, error);
+            myMoneyManager.setMessage(false, error);
         }
     });
 };
@@ -39,10 +39,10 @@ myMoneyManager.addMoneyCallback = ({ currency, amount }) => {
 myMoneyManager.conversionMoneyCallback = ({ fromCurrency, targetCurrency, fromAmount }) => {
     ApiConnector.convertMoney({ fromCurrency, targetCurrency, fromAmount }, ({success, data, error}) => {
         if (success) {
-            myMoneyManager.setMessage(false, "Конвертация прошла успешно");
+            myMoneyManager.setMessage(true, "Конвертация прошла успешно");
             ProfileWidget.showProfile(data);
         } else {
-            myMoneyManager.setMessage(true, error);
+            myMoneyManager.setMessage(false, error);
         }
     });
 };
@@ -50,10 +50,10 @@ myMoneyManager.conversionMoneyCallback = ({ fromCurrency, targetCurrency, fromAm
 myMoneyManager.sendMoneyCallback = ({ to, amount, currency }) => {
     ApiConnector.transferMoney({ to, currency, amount }, ({success, data, error}) => {
         if (success) {
-            myMoneyManager.setMessage(false, "Перевод средств прошел успешно");
+            myMoneyManager.setMessage(true, "Перевод средств прошел успешно");
             ProfileWidget.showProfile(data);
         } else {
-            myMoneyManager.setMessage(true, error);
+            myMoneyManager.setMessage(false, error);
         }
     });
 };
@@ -66,19 +66,19 @@ ApiConnector.getFavorites(({success, data, error}) => {
         myFavoritesWidget.fillTable(data);
         myMoneyManager.updateUsersList(data);
     } else {
-        myFavoritesWidget.setMessage(true, error);
+        myFavoritesWidget.setMessage(false, error);
     }
 });
 
 myFavoritesWidget.addUserCallback = ({ id, name }) => {
     ApiConnector.addUserToFavorites({ id, name }, ({success, data, error}) => {
         if (success) {
-            myFavoritesWidget.setMessage(false, "Добавление в избранное прошло успешно");
+            myFavoritesWidget.setMessage(true, "Добавление в избранное прошло успешно");
             myFavoritesWidget.clearTable();
             myFavoritesWidget.fillTable(data);
             myMoneyManager.updateUsersList(data);
         } else {
-            myFavoritesWidget.setMessage(true, error);
+            myFavoritesWidget.setMessage(false, error);
         }
     })
 }
@@ -86,12 +86,12 @@ myFavoritesWidget.addUserCallback = ({ id, name }) => {
 myFavoritesWidget.removeUserCallback = (userId) => {
     ApiConnector.removeUserFromFavorites(userId, ({success, data, error}) => {
         if (success) {
-            myFavoritesWidget.setMessage(false, "Удаление из избранного прошло успешно");
+            myFavoritesWidget.setMessage(true, "Удаление из избранного прошло успешно");
             myFavoritesWidget.clearTable();
             myFavoritesWidget.fillTable(data);
             myMoneyManager.updateUsersList(data);
         } else {
-            myMoneyManager.setMessage(true, error);
+            myMoneyManager.setMessage(false, error);
         }
     });
 }; 
